@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -83,10 +84,34 @@ public class JobData {
 
         return jobs;
     }
+    /* Return results of search across all columns without duplicates using inclusion of search term
+    */
+    public static ArrayList<HashMap<String, String>> findByValue (String column, String value) {
 
-    /**
-     * Read in data from a CSV file and store it in a list
-     */
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        //iterate through all column fields using menu header list, columnChoices which is hashmap<string, string>
+
+        if (column.equals("all")) {
+            for (int i = 0; i < allJobs.size(); i++) {
+                String job = "";
+                for (Map.Entry<String, String> list : allJobs.get(i).entrySet()) {
+                    String cell_val = list.getValue();
+
+                    job = job + " " + cell_val;
+                }
+
+                if (job.contains(value)) {
+                    jobs.add(allJobs.get(i));
+                }
+
+            }
+        } return jobs;
+    }
+    /* Read in data from a CSV file and store it in a list
+         */
     private static void loadData() {
 
         // Only load data once
